@@ -1,13 +1,14 @@
 name: intility-logging
-version: 0.1.0
+version: 1.0.0
 description: Enable common logging infrastructure
 url: https://github.com/intility/logging
 
 deployTo:
   controlPlane: true
-  runtimeCluster: false
+  runtimeCluster: true
 
 tags:
-  - Unofficial
+  - unofficial
+  - logging
 
 invisible: false
