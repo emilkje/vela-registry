@@ -1,0 +1,23 @@
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: Enable logging to common infrastructure
+  name: intility-logging
+  namespace: vela-system
+spec:
+  appliesToWorkloads:
+  - deployments.apps
+  podDisruptive: true
+  schematic:
+    cue:
+      template: "patch: spec: {\n\tif parameter.logs != _|_ {\n\t\tselector: matchLabels:
+        {\n\t\t\tif parameter.logs.structured {\n\t\t\t\t\"log-format\": \"json\"\n\t\t\t}\n\t\t\tif
+        !parameter.logs.structured {\n\t\t\t\t\"log-format\": \"default\"\n\t\t\t}\n\t\t\tif
+        parameter.logs.index != _|_ {\n\t\t\t\t\"log-index\": parameter.logs.index\n\t\t\t}\n\t\t}\n\t\ttemplate:
+        metadata: labels: {\n\t\t\tif parameter.logs.structured {\n\t\t\t\t\"log-format\":
+        \"json\"\n\t\t\t}\n\t\t\tif !parameter.logs.structured {\n\t\t\t\t\"log-format\":
+        \"default\"\n\t\t\t}\n\t\t\tif parameter.logs.index != _|_ {\n\t\t\t\t\"log-index\":
+        parameter.logs.index\n\t\t\t}\n\t\t}\n\t}\n}\nparameter: logs?: {\n\tstructured?:
+        bool | *false\n\tindex?:      string | *context.name\n}\n"
+  workloadRefPath: ""

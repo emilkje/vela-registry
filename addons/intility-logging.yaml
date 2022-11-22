@@ -1,0 +1,38 @@
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: Enable logging to common infrastructure
+  creationTimestamp: "2022-11-22T08:13:30Z"
+  generation: 1
+  name: intility-logging
+  namespace: vela-system
+  resourceVersion: "22677220"
+  uid: 4a5c7f2f-3476-43a1-87c8-6653c8a2567c
+spec:
+  appliesToWorkloads:
+  - deployments.apps
+  podDisruptive: true
+  schematic:
+    cue:
+      template: "patch: spec: {\n\tif parameter.logs != _|_ {\n\t\tselector: matchLabels:
+        {\n\t\t\tif parameter.logs.structured {\n\t\t\t\t\"log-format\": \"json\"\n\t\t\t}\n\t\t\tif
+        !parameter.logs.structured {\n\t\t\t\t\"log-format\": \"default\"\n\t\t\t}\n\t\t\tif
+        parameter.logs.index != _|_ {\n\t\t\t\t\"log-index\": parameter.logs.index\n\t\t\t}\n\t\t}\n\t\ttemplate:
+        metadata: labels: {\n\t\t\tif parameter.logs.structured {\n\t\t\t\t\"log-format\":
+        \"json\"\n\t\t\t}\n\t\t\tif !parameter.logs.structured {\n\t\t\t\t\"log-format\":
+        \"default\"\n\t\t\t}\n\t\t\tif parameter.logs.index != _|_ {\n\t\t\t\t\"log-index\":
+        parameter.logs.index\n\t\t\t}\n\t\t}\n\t}\n}\nparameter: logs?: {\n\tstructured?:
+        bool | *false\n\tindex?:      string | *context.name\n}\n"
+  workloadRefPath: ""
+status:
+  conditions:
+  - lastTransitionTime: "2022-11-22T08:13:30Z"
+    reason: ReconcileSuccess
+    status: "True"
+    type: Synced
+  configMapRef: trait-schema-intility-logging
+  latestRevision:
+    name: intility-logging-v1
+    revision: 1
+    revisionHash: 6463cfc50d75c5bb
